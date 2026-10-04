@@ -21,6 +21,7 @@ With HyPerf, we aim at *balancing accuracy and efficiency*, achieving robust per
 
 Empirical evaluations on ten real-world software systems across up to 35 workloads demonstrates that HyPerf matches or outperforms state-of-the-art approaches while requiring fewer measurements. Notably, HyPerf is indeed capable of *interpretable performance reasoning* and can identify minimal workload subsets that capture essential performance variations.
 
+Implementation details that complement the paper (model and prior specifications, the evaluation protocol of the reported results, and known differences) are documented in [IMPLEMENTATION_NOTES.md](IMPLEMENTATION_NOTES.md).
 
 ## Supplementary Material
 
