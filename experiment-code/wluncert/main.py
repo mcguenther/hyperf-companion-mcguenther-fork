@@ -61,6 +61,7 @@ from data import (
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression, Lasso
 from sklearn.dummy import DummyRegressor
+from paper_models import PAPER_MODEL_CLASSES
 from models import (
     MCMCMultilevelPartial,
     NoPoolingEnvModel,
@@ -118,6 +119,18 @@ def main():
         "--training-set-size",
         type=float,
         help="Disables the sweep over different training set sizes and uses the given size",
+    )
+    parser.add_argument(
+        "--models",
+        nargs="+",
+        help="Model labels to run instead of the default selection, e.g. the models "
+        "exactly as in Eqs. 1-3 of the paper: paper-no-pooling-mcmc "
+        "paper-cpooling-mcmc paper-partial-pooling-mcmc",
+    )
+    parser.add_argument(
+        "--systems",
+        nargs="+",
+        help="Subject systems to run instead of all ten systems of the paper",
     )
     args = parser.parse_args()
     n_jobs = args.jobs
@@ -181,6 +194,13 @@ def main():
         chosen_model_lbls.extend(["model_lassocv_reg_no_pool"])
         chosen_model_lbls.extend(["model_lassocv_reg_cpool"])
 
+    if args.models:
+        unknown = sorted(set(args.models) - set(models))
+        if unknown:
+            parser.error(f"unknown model labels: {unknown}")
+        chosen_model_lbls = list(args.models)
+    if args.systems:
+        selected_data = tuple(args.systems)
     models = {k: v for k, v in models.items() if k in chosen_model_lbls}
 
     print("Using systems:", selected_data)
@@ -447,6 +467,15 @@ def get_all_models(debug, n_jobs, plot, do_store=False):
         "model_dal_no_pooling": model_dal_no_pooling,
         "model_dal_cpooling": model_dal_cpooling,
     }
+    # Models exactly as written in Eqs. 1-3 of the paper (see paper_models.py)
+    for lbl, model_class in PAPER_MODEL_CLASSES.items():
+        models[lbl] = model_class(
+            plot=plot,
+            **mcmc_kwargs,
+            return_samples_by_default=True,
+            preprocessings=[Standardizer()],
+            persist_arviz=do_store,
+        )
     return models
 
 

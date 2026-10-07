@@ -91,6 +91,7 @@ Example for Z3:
     If `--reps` is not given, `main.py` runs only 3 repetitions, so pass `--reps 30` to match the paper.
     The Docker `rq1` command below already defaults to 30 repetitions, whereas the `rq23` command always runs a single repetition.
   - `--training-set-size` disables the sweep over different training set sizes and, instead, only uses the given size. Passing 0.5 will train on 0.5N training data for all software systems listed in the main.py.
+  - `--models` runs the given model labels instead of the default selection, and `--systems` restricts the run to the given subject systems (these two options are only available when calling `main.py` directly). The labels `paper-no-pooling-mcmc`, `paper-cpooling-mcmc` and `paper-partial-pooling-mcmc` select Bayesian models that implement Eqs. 1–3 of the paper literally (see `experiment-code/wluncert/paper_models.py`); the models used for the reported results are `no-pooling-mcmc-1model`, `cpooling-mcmc-1model` and `partial-pooling-mcmc-robust-adaptive-shrinkage`. Example: `python3 main.py --models paper-partial-pooling-mcmc --systems z3 --reps 1 --training-set-size 1`.
   - To replicate the RQs in the paper, use the commands for running the docker container as outlined below.
 
 [//]: # (     - To replicate RQ1, use the rq1 command running the docker choose `--reps 30` and do not set the `--store` flag because it will likeliy fill up the hard disk.)
